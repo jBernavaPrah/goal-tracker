@@ -15,10 +15,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/email/verify', function (Request $request) {
-    // Here only to generate correctly the path for verification.
-})->middleware(['auth', 'signed'])->name('verification.verify');
-
 
 Route::get('/{any}', function () {
     return view('welcome');
