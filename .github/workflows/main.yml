@@ -7,29 +7,45 @@ on:
     branches: [ main ]
 
 jobs:
+
   testing:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./app
+
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
 
-        # In this step, this action saves a list of existing images,
-        # the cache is created without them in the post run.
-        # It also restores the cache if it exists.
-      - uses: satackey/action-docker-layer-caching@v0.0.11
-        # Ignore the failure of a step and avoid terminating the job.
-        continue-on-error: true
+      - name: Cache composer dependencies
+        uses: actions/cache@v1
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
 
-      - name: Build dockerfile and cache it
-        run: docker build . -t goal-tracker/php:build-latest --target build
+      - name: Run composer install
+        run: composer install -n --prefer-dist
+        env:
+          APP_ENV: testing
 
-      - name: Install Dependencies
-        run: docker run -v $PWD/src:/var/www/html -w /var/www/html goal-tracker/php:build-latest composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Prepare Laravel Application
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+      - name: Cache yarn dependencies
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: yarn-${{ hashFiles('yarn.lock') }}
 
-      - name: Create new Key
-        run: docker run -v $PWD/src:/var/www/html -w /var/www/html goal-tracker/php:build-latest php artisan key:generate
+      - name: Run yarn
+        run: yarn && yarn dev
 
-      - name: Execute tests (Unit and Feature tests) via Artisan test
-        run: docker run -v $PWD/src:/var/www/html -w /var/www/html goal-tracker/php:build-latest php artisan test
+      - name: Run tests
+        run: php artisan test
+
 
   deploy:
     needs: testing
