@@ -2,9 +2,9 @@ name: Develop Workflow
 
 on:
   push:
-    branches: [ mainx ]
+    branches: [ main ]
   pull_request:
-    branches: [ mainx ]
+    branches: [ main ]
 
 jobs:
   testing:
@@ -23,9 +23,10 @@ jobs:
         run: docker build . -t goal-tracker/php:build-latest --target build
 
       - name: Install Dependencies
-        run: docker run --env COMPOSER_AUTH -v $PWD/src:/var/www/html -w /var/www/html goal-tracker/php:build-latest composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-        env:
-          COMPOSER_AUTH: ${{secrets.COMPOSER_AUTH}}
+        run: docker run -v $PWD/src:/var/www/html -w /var/www/html goal-tracker/php:build-latest composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: Create new Key
+        run: docker run -v $PWD/src:/var/www/html -w /var/www/html goal-tracker/php:build-latest php artisan key:generate
 
       - name: Execute tests (Unit and Feature tests) via Artisan test
         run: docker run -v $PWD/src:/var/www/html -w /var/www/html goal-tracker/php:build-latest php artisan test
