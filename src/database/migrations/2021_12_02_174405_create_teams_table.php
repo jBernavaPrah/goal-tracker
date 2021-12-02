@@ -23,10 +23,14 @@ return new class extends Migration {
         });
 
         Schema::table('games', function (Blueprint $table) {
-            $table->foreignId('team1_id')->constrained('teams')
+            $table->foreignId('team1_id')
+                ->nullable()
+                ->constrained('teams')
                 ->nullOnDelete()
                 ->cascadeOnUpdate();
-            $table->foreignId('team2_id')->constrained('teams')
+            $table->foreignId('team2_id')
+                ->nullable()
+                ->constrained('teams')
                 ->nullOnDelete()
                 ->cascadeOnUpdate();
         });
