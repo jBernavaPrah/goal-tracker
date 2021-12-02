@@ -32,20 +32,11 @@ services:
     volumes:
       - ./src:/var/www/html
     depends_on:
-      - composer
       - database
       - cache
     networks:
       - default
       - external
-
-  # composer
-  composer:
-    image: composer/composer
-    working_dir: /var/www/html
-    volumes:
-      - ./src:/var/www/html
-    command: install
 
   database:
     image: postgres
