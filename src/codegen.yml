@@ -1,0 +1,13 @@
+overwrite: true
+schema: "https://paymenu.test/graphql"
+documents: "resources/js/graphql/*.ts"
+generates:
+  resources/js/generated/graphql.tsx:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+
+  ./graphql.schema.json:
+    plugins:
+      - "introspection"

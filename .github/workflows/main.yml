@@ -1,0 +1,60 @@
+name: Develop Workflow
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  testing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+        # In this step, this action saves a list of existing images,
+        # the cache is created without them in the post run.
+        # It also restores the cache if it exists.
+      - uses: satackey/action-docker-layer-caching@v0.0.11
+        # Ignore the failure of a step and avoid terminating the job.
+        continue-on-error: true
+
+      - name: Build dockerfile and cache it
+        run: docker build . -t paymenu/php:build-latest --target build
+
+      - name: Install Dependencies
+        run: docker run --env COMPOSER_AUTH -v $PWD/src:/var/www/html -w /var/www/html paymenu/php:build-latest composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        env:
+          COMPOSER_AUTH: ${{secrets.COMPOSER_AUTH}}
+
+      - name: Execute tests (Unit and Feature tests) via Artisan test
+        run: docker run -v $PWD/src:/var/www/html -w /var/www/html paymenu/php:build-latest php artisan test
+
+  deploy:
+    needs: testing
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "goal-tracker"
+          heroku_email: "webjure@gmail.com"
+          appdir: "src"
+          region: "eu"
+
+        env:
+          HD_APP_DEBUG: false
+          HD_APP_ENV: production
+          HD_APP_NAME: "Goal Tracker"
+          HD_APP_URL: "https://goal-tracker.com"
+          HD_BROADCAST_DRIVER: redis
+          HD_CACHE_DRIVER: redis
+          HD_SESSION_DOMAIN: ".goal-tracker.com"
+          HD_SESSION_DRIVER: redis
+          HD_SESSION_SECURE_COOKIE: true
+          HD_SESSION_SAME_SITE: lax
+          HD_DB_CONNECTION: pgsql
+          HD_REDIS_CLIENT: predis
+          HD_QUEUE_CONNECTION: redis
+          HD_SANCTUM_STATEFUL_DOMAINS: "goal-tracker.com:8000,goal-tracker.com,localhost:3000"

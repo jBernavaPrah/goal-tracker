@@ -1,0 +1,111 @@
+<?php
+
+namespace {{ namespace }};
+
+use Illuminate\Auth\Access\HandlesAuthorization;
+use {{ namespacedModel }};
+use {{ namespacedUserModel }};
+use Illuminate\Auth\Access\Response;
+
+class {{ class }}
+{
+    use HandlesAuthorization;
+
+    /**
+     * Determine whether the user can view any models.
+     *
+     * @param  {{ user }} $user
+     * @return Response|bool
+     */
+    public function viewAny({{ user }} $user): Response|bool
+    {
+        return true;
+    }
+
+    /**
+     * Determine whether the user can view the model.
+     *
+     * @param  {{ user }} $user
+     * @param  {{ model }} ${{ modelVariable }}
+     * @param array $args
+     * @return Response|bool
+     */
+    public function view({{ user }} $user, {{ model }} ${{ modelVariable }}, array $args ): Response|bool
+    {
+        if (!${{ modelVariable }}->belongsToUser($user)->exists()) return false;
+
+        return true;
+    }
+
+    /**
+     * Determine whether the user can create models.
+     *
+     * @param  {{ user }} $user
+     * @param array $args
+     * @return Response|bool
+     */
+    public function create({{ user }} $user, array $args): Response|bool
+    {
+        return true;
+    }
+
+    /**
+     * Determine whether the user can update the model.
+     *
+     * @param  {{ user }} $user
+     * @param  {{ model }} ${{ modelVariable }}
+     * @param array $args
+     * @return Response|bool
+     */
+    public function update({{ user }} $user, {{ model }} ${{ modelVariable }}, array $args): Response|bool
+    {
+        if (!${{ modelVariable }}->belongsToUser($user)->exists()) return false;
+
+        return true;
+    }
+
+    /**
+     * Determine whether the user can delete the model.
+     *
+     * @param  {{ user }} $user
+     * @param  {{ model }} ${{ modelVariable }}
+     * @param array $args
+     * @return Response|bool
+     */
+    public function delete({{ user }} $user, {{ model }} ${{ modelVariable }}, array $args): Response|bool
+    {
+        if (!${{ modelVariable }}->belongsToUser($user)->exists()) return false;
+
+        return true;
+    }
+
+    /**
+     * Determine whether the user can restore the model.
+     *
+     * @param  {{ user }} $user
+     * @param  {{ model }} ${{ modelVariable }}
+     * @param array $args
+     * @return Response|bool
+     */
+    public function restore({{ user }} $user, {{ model }} ${{ modelVariable }}, array $args): Response|bool
+    {
+        if (!${{ modelVariable }}->belongsToUser($user)->exists()) return false;
+
+        return true;
+    }
+
+    /**
+     * Determine whether the user can permanently delete the model.
+     *
+     * @param  {{ user }} $user
+     * @param  {{ model }} ${{ modelVariable }}
+     * @param array $args
+     * @return Response|bool
+     */
+    public function forceDelete({{ user }} $user, {{ model }} ${{ modelVariable }}, array $args): Response|bool
+    {
+        if (!${{ modelVariable }}->belongsToUser($user)->exists()) return false;
+
+        return true;
+    }
+}
