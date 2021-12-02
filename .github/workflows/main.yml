@@ -40,8 +40,8 @@ jobs:
           path: node_modules
           key: yarn-${{ hashFiles('yarn.lock') }}
 
-      - name: Run yarn
-        run: yarn && yarn dev
+#      - name: Run yarn
+#        run: yarn && yarn dev
 
       - name: Run tests
         run: php artisan test
