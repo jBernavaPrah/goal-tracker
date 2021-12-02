@@ -12,17 +12,34 @@ RUN ln -nsf /usr/bin/php8 /usr/bin/php
 RUN rm -rf /var/cache/apk/*
 
 
+FROM build as App
+
 RUN apk --update --no-cache add \
     php8-pdo php8-pgsql php8-pdo_pgsql nano wget postgresql-dev
 
 # RUN apk add --no-cache --virtual \
 RUN    docker-php-ext-install pdo && \
     docker-php-ext-install pdo_pgsql && \
+    # docker-php-ext-install opcache && \
     docker-php-ext-install exif
+    # apk del build-essentials && rm -rf /usr/src/php*
+    # Enable zip
+    # build-essentials icu-dev icu-libs zlib-dev g++ make automake autoconf libzip-dev \
+    # docker-php-ext-install zip && \
+    # Enable gd
+    # libpng-dev libwebp-dev libjpeg-turbo-dev freetype-dev && \
+    # docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp && \
+    # docker-php-ext-install gd && \
+
+    # The Internationalization extension (Intl) is a wrapper for the ICU library
+    # docker-php-ext-install intl && \
+
+
+# RUN wget https://getcomposer.org/composer-stable.phar -O /usr/local/bin/composer && chmod +x /usr/local/bin/composer
 
 # Cleanup
 RUN rm -rf /var/cache/apk/*
 
-WORKDIR /var/www/html
+WORKDIR /var/www/html/
 EXPOSE 8000
 CMD ["php", "artisan", "serve",  "--host=0.0.0.0"]
