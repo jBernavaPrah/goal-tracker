@@ -12,11 +12,23 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+        # In this step, this action saves a list of existing images,
+        # the cache is created without them in the post run.
+        # It also restores the cache if it exists.
+      - uses: satackey/action-docker-layer-caching@v0.0.11
+        # Ignore the failure of a step and avoid terminating the job.
+        continue-on-error: true
+
+      - name: Build dockerfile and cache it
+        run: docker build . -t goal-tracker/php:build-latest --target build
+
       - name: Install Dependencies
-        run: docker run -v $PWD/src:/var/www/html -w /var/www/html composer composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        run: docker run --env COMPOSER_AUTH -v $PWD/src:/var/www/html -w /var/www/html goal-tracker/php:build-latest composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        env:
+          COMPOSER_AUTH: ${{secrets.COMPOSER_AUTH}}
 
       - name: Execute tests (Unit and Feature tests) via Artisan test
-        run: docker compose run -v $PWD/src:/var/www/html -w /var/www/html app php artisan test
+        run: docker run -v $PWD/src:/var/www/html -w /var/www/html goal-tracker/php:build-latest php artisan test
 
   deploy:
     needs: testing

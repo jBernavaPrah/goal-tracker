@@ -2,7 +2,7 @@ FROM php:8-fpm-alpine as build
 
 # Dependencies
 RUN apk --update --no-cache add \
-    git curl \
+    git curl composer \
     php8-phar php8-tokenizer php8-zip php8-curl php8-mbstring \
     php8-dom php8-xml php8-xmlwriter php8-ctype php8-intl php8-pecl-uuid \
     php8-bcmath php8-gmp php8-pdo_sqlite php8-sodium php8-sysvsem \
