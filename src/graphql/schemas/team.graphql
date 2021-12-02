@@ -1,0 +1,45 @@
+type Team implements Model {
+    id: ID!
+
+    name: String!
+    games: [Game!] @hasMany(type: PAGINATOR)
+    players: [Player!] @hasMany(type: PAGINATOR)
+
+    createdAt: DateTime!
+    updatedAt: DateTime!
+    deletedAt: DateTime
+}
+
+
+
+extend type Query   {
+    teams: [Team!]!
+    @paginate(type: PAGINATOR)
+
+    team(id: ID! @eq): Team
+    @find
+}
+
+extend type Mutation  {
+    createTeam(input: CreateTeamInput! @spread): Team!
+    @create
+
+    updateTeam(input: UpdateTeamInput! @spread): Team!
+    @update
+
+    deleteTeam(id: ID!): Team!
+    @delete
+
+}
+
+input CreateTeamInput {
+    name: String! @rules(apply: ["min:3"])
+
+}
+
+input UpdateTeamInput {
+    id: ID!
+    name: String @rules(apply: ["min:3"])
+}
+
+

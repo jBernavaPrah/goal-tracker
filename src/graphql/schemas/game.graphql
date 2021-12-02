@@ -1,0 +1,43 @@
+type Game implements Model {
+    id: ID!
+
+    team1: Team! @belongsTo
+    team2: Team! @belongsTo
+
+    createdAt: DateTime!
+    updatedAt: DateTime!
+    deletedAt: DateTime
+
+}
+
+
+extend type Query   {
+    games: [Game!]!
+    @paginate(type: PAGINATOR)
+
+    game(id: ID! @eq): Game
+    @find
+}
+
+extend type Mutation  {
+    createGame(input: CreateGameInput! @spread): Game!
+    @create
+
+    updateGame(input: UpdateGameInput! @spread): Game!
+    @update
+
+    deleteGame(id: ID!): Game!
+    @delete
+
+}
+
+input UpdateGameInput {
+    id: ID!
+    team1: ID @rename(attribute: "team1_id") @rules(apply: ["exists:teams,id"])
+    team2: ID @rename(attribute: "team2_id") @rules(apply: ["exists:teams,id"])
+}
+
+input CreateGameInput {
+    team1: ID! @rename(attribute: "team1_id") @rules(apply: ["exists:teams,id"])
+    team2: ID! @rename(attribute: "team2_id") @rules(apply: ["exists:teams,id"])
+}

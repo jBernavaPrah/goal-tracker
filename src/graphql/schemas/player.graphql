@@ -1,0 +1,49 @@
+type Player implements Model{
+    id: ID!
+
+    team: Team! @belongsTo
+
+    name: String!
+
+    createdAt: DateTime!
+    deletedAt: DateTime
+    updatedAt: DateTime!
+
+}
+
+
+
+extend type Query   {
+    players: [Player!]!
+    @paginate(type: PAGINATOR)
+
+    player(id: ID! @eq): Player
+    @find
+}
+
+extend type Mutation  {
+    createPlayer(input: CreatePlayerInput! @spread): Player!
+    @create
+
+    updatePlayer(input: UpdatePlayerInput! @spread): Player!
+    @update
+
+    deletePlayer(id: ID!): Player!
+    @delete
+
+}
+
+input CreatePlayerInput {
+    name: String! @rules(apply: ["min:3"])
+    team: ID! @rename(attribute: "team_id") @rules(apply: ["exists:teams,id"])
+
+}
+
+input UpdatePlayerInput {
+    id: ID!
+    name: String @rules(apply: ["min:3"])
+    team: ID @rename(attribute: "team_id") @rules(apply: ["exists:teams,id"])
+
+}
+
+
