@@ -1,0 +1,66 @@
+query listTeams($first: Int $page: Int $name: String $withPlayers:Boolean) {
+    teams(first: $first, page: $page name: $name withPlayers: $withPlayers) {
+        data {
+            ...TeamFields
+        }
+        paginatorInfo{
+            ...PaginatorInfoFields
+        }
+    }
+}
+
+query searchAutocompleteTeams($name:String $withPlayers:Boolean){
+    teams(name:$name, withPlayers: $withPlayers){
+        data{
+            ...TeamFields
+        }
+    }
+}
+
+query teamDetail($id: ID!){
+    team(id: $id){
+        ...TeamFields
+    }
+}
+
+query teamCard($id: ID!){
+    team(id: $id){
+        ...TeamFields
+    }
+}
+
+
+mutation updateTeam($id:ID! $name: String){
+    updateTeam(input: {id: $id, name: $name}){
+        ...TeamFields
+    }
+}
+
+mutation createTeam($name: String!){
+    createTeam(input: {name: $name}){
+        ...TeamFields
+    }
+}
+
+mutation deleteTeam($id: ID!){
+    deleteTeam(id:$id){
+        id
+    }
+}
+
+fragment TeamFields on Team {
+    id
+    name
+    players {
+        data {
+            id
+            name
+            createdAt
+        }
+        paginatorInfo {
+            ...PaginatorInfoFields
+        }
+    }
+    updatedAt
+    createdAt
+}

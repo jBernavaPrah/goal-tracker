@@ -7,6 +7,7 @@
     <title>{{config('app.name')}}</title>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -15,6 +16,6 @@
 <!-- React root DOM -->
 <div id="root"></div>
 <!-- React JS -->
-<script src="{{ asset('js/index.js') }}" defer></script>
+<script src="{{ mix('js/index.js') }}" defer></script>
 </body>
 </html>

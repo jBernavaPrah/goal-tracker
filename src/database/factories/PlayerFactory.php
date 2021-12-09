@@ -15,7 +15,7 @@ class PlayerFactory extends Factory
     public function definition()
     {
         return [
-            'team_id' => Team::factory()->create(),
+            'team_id' => Team::factory(),
             'name' => $this->faker->name
         ];
     }

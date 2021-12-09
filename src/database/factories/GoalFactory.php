@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Game;
 use App\Models\Player;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -15,7 +16,8 @@ class GoalFactory extends Factory
     public function definition()
     {
         return [
-            'player_id' => Player::factory()->create()
+            'game_id' => Game::factory(),
+            'player_id' => Player::factory(),
         ];
     }
 }

@@ -1,0 +1,30 @@
+mutation createGoal($player:ID! $game: ID!){
+    createGoal(input: {player: $player game: $game}){
+        ...GoalFields
+    }
+}
+
+mutation deleteGoal($id:ID!){
+    deleteGoal(id: $id){
+        ...GoalFields
+    }
+}
+
+query listGoalsByGameAndTeam($game:ID! $team:ID!){
+    goals(game: $game team: $team){
+        ...GoalFields
+    }
+}
+
+fragment GoalFields on Goal{
+    id
+    game{
+        ...GameFields
+    }
+    player{
+        ...PlayerFields
+    }
+    createdAt
+
+
+}

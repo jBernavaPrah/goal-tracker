@@ -5,14 +5,22 @@ import reportWebVitals from "./reportWebVitals";
 import {RecoilRoot} from "recoil";
 import {BrowserRouter as Router} from "react-router-dom";
 import {ApolloProvider} from "@apollo/client";
-import apolloClient from '@paymenu/apollo'
+import apolloClient from '@fe/apollo'
+import AdapterDayjs from '@mui/lab/AdapterDayjs';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import * as dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+dayjs.extend(relativeTime)
+
 
 ReactDOM.render(
     <React.StrictMode>
         <ApolloProvider client={apolloClient}>
             <Router>
                 <RecoilRoot>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <App/>
+                    </LocalizationProvider>
                 </RecoilRoot>
             </Router>
         </ApolloProvider>

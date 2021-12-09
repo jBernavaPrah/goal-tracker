@@ -2,18 +2,19 @@ type Team implements Model {
     id: ID!
 
     name: String!
-    games: [Game!] @hasMany(type: PAGINATOR)
-    players: [Player!] @hasMany(type: PAGINATOR)
+    players: [Player!]! @hasMany(type: PAGINATOR)
 
-    createdAt: DateTime!
-    updatedAt: DateTime!
-    deletedAt: DateTime
+    gameTeam1: [Game!]! @hasMany(type: PAGINATOR)
+    gameTeam2: [Game!]! @hasMany(type: PAGINATOR)
+
+    createdAt: DateTime! @rename(attribute: "created_at")
+    updatedAt: DateTime! @rename(attribute: "updated_at")
+    deletedAt: DateTime @rename(attribute: "deleted_at")
+
 }
 
-
-
 extend type Query   {
-    teams: [Team!]!
+    teams(name: String @where(operator: "like") withPlayers: Boolean @scope(name: "withPlayers")): [Team!]!
     @paginate(type: PAGINATOR)
 
     team(id: ID! @eq): Team

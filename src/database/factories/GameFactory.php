@@ -15,8 +15,9 @@ class GameFactory extends Factory
     public function definition()
     {
         return [
-            'team1_id' => Team::factory()->create(),
-            'team2_id' => Team::factory()->create(),
+            'team1_id' => Team::factory(),
+            'team2_id' => Team::factory(),
+            'played_at' => $this->faker->dateTime
         ];
     }
 }

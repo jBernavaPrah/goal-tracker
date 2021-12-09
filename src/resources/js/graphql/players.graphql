@@ -1,0 +1,58 @@
+mutation createPlayer($name:String! $team: ID!){
+    createPlayer(input: {name: $name, team:$team}){
+        ...PlayerFields
+    }
+}
+
+mutation updatePlayerName($id:ID! $name:String!){
+    updatePlayer(input: {name: $name, id:$id}){
+        ...PlayerFields
+    }
+}
+
+mutation deletePlayer($id: ID!){
+    deletePlayer(id: $id){
+        id
+    }
+}
+
+query listPlayersByTeam($team:ID!){
+    players(team: $team){
+        data {
+            ...PlayerFields
+        }
+        paginatorInfo{
+            ...PaginatorInfoFields
+        }
+    }
+}
+
+query playerCard($id: ID!){
+    player(id: $id){
+        ...PlayerFields
+    }
+}
+
+fragment PlayerFields on Player {
+    id
+    name
+    updatedAt
+    team {
+        id
+        name
+
+    }
+    goals{
+        data{
+            id
+            game {
+                id
+                totalGoalsTeam1
+                totalGoalsTeam2
+            }
+        }
+        paginatorInfo {
+            total
+        }
+    }
+}

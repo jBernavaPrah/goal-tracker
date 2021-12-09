@@ -1,6 +1,6 @@
 overwrite: true
-schema: "https://paymenu.test/graphql"
-documents: "resources/js/graphql/*.ts"
+schema: "storage/app/lighthouse-schema.json"
+documents: "resources/js/graphql/**"
 generates:
   resources/js/generated/graphql.tsx:
     plugins:
@@ -8,6 +8,3 @@ generates:
       - "typescript-operations"
       - "typescript-react-apollo"
 
-  ./graphql.schema.json:
-    plugins:
-      - "introspection"

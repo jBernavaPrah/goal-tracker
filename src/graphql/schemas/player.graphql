@@ -3,18 +3,17 @@ type Player implements Model{
 
     team: Team! @belongsTo
 
+    goals: [Goal!]! @hasMany(type: PAGINATOR)
     name: String!
 
-    createdAt: DateTime!
-    deletedAt: DateTime
-    updatedAt: DateTime!
+    createdAt: DateTime! @rename(attribute: "created_at")
+    updatedAt: DateTime! @rename(attribute: "updated_at")
+    deletedAt: DateTime @rename(attribute: "deleted_at")
 
 }
 
-
-
 extend type Query   {
-    players: [Player!]!
+    players(team: ID @where(key: "team_id")): [Player!]!
     @paginate(type: PAGINATOR)
 
     player(id: ID! @eq): Player

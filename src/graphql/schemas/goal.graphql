@@ -1,23 +1,33 @@
 type Goal implements Model{
     id: ID!
 
+    game: Game! @belongsTo
     player: Player! @belongsTo
 
-    createdAt: DateTime!
-    updatedAt: DateTime!
-    deletedAt: DateTime
+    createdAt: DateTime! @rename(attribute: "created_at")
+    updatedAt: DateTime! @rename(attribute: "updated_at")
+    deletedAt: DateTime @rename(attribute: "deleted_at")
+
 }
 
+extend type Query  {
+    goals(game: ID! @where(key: "game_id")
+        player: ID @where(key: "player_id")
+        team: ID! @scope(name: "byTeam")
+    ): [Goal!]!
+    @all
+}
 
 extend type Mutation  {
     createGoal(input: CreateGoalInput! @spread): Goal!
     @create
 
-    deleteGoal(id: ID!): Goal!
+    deleteGoal(id: ID! @rules(apply: ["exists:goals,id"])): Goal!
     @delete
 
 }
 
 input CreateGoalInput {
     player: ID! @rename(attribute: "player_id") @rules(apply: ["exists:players,id"])
+    game: ID! @rename(attribute: "game_id") @rules(apply: ["exists:games,id"])
 }

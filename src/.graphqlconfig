@@ -1,0 +1,20 @@
+{
+    "projects": {
+        "BE": {
+            "excludes": [
+                "./storage/app/lighthouse-schema.json"
+            ],
+            "includes": [
+                "graphql/**",
+                "schema-directives.graphql"
+            ]
+        },
+        "FE": {
+            "excludes": [
+                "graphql/**",
+                "schema-directives.graphql"
+            ],
+            "schemaPath": "./storage/app/lighthouse-schema.json"
+        }
+    }
+}

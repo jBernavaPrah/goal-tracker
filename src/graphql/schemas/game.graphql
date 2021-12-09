@@ -3,13 +3,17 @@ type Game implements Model {
 
     team1: Team! @belongsTo
     team2: Team! @belongsTo
+    totalGoalsTeam1: Int! @rename(attribute: "total_goals_team1")
+    totalGoalsTeam2: Int! @rename(attribute: "total_goals_team2")
 
-    createdAt: DateTime!
-    updatedAt: DateTime!
-    deletedAt: DateTime
+    playedAt: DateTime! @rename(attribute: "played_at")
+    goals: [Goal]! @hasMany(type: PAGINATOR)
+
+    createdAt: DateTime! @rename(attribute: "created_at")
+    updatedAt: DateTime! @rename(attribute: "updated_at")
+    deletedAt: DateTime @rename(attribute: "deleted_at")
 
 }
-
 
 extend type Query   {
     games: [Game!]!
@@ -35,9 +39,11 @@ input UpdateGameInput {
     id: ID!
     team1: ID @rename(attribute: "team1_id") @rules(apply: ["exists:teams,id"])
     team2: ID @rename(attribute: "team2_id") @rules(apply: ["exists:teams,id"])
+    playedAt: DateTime @rename(attribute: "played_at")
 }
 
 input CreateGameInput {
     team1: ID! @rename(attribute: "team1_id") @rules(apply: ["exists:teams,id"])
     team2: ID! @rename(attribute: "team2_id") @rules(apply: ["exists:teams,id"])
+    playedAt: DateTime! @rename(attribute: "played_at")
 }

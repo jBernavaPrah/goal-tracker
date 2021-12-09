@@ -13,19 +13,31 @@ const path = require('path');
  */
 
 mix.ts('resources/js/index.tsx', 'public/js')
-    .react();
-    //.sass('resources/sass/app.scss', 'public/css');
-
-mix
+    .react()
     .webpackConfig({
         resolve: {
             extensions: [".js", ".jsx", ".tsx"],
             alias: {
-                '@paymenu': path.resolve(__dirname, 'resources/js'),
+                '@fe': path.resolve(__dirname, 'resources/js'),
             }
         }
+    })
+
+if (!mix.inProduction()) {
+    mix.browserSync({
+        codeSync:true,
+
+        proxy: "localhost:8000",
+        files: "resources/js/**",
+        ui: false,
+        hmrOptions: {
+            host: "localhost",
+            port: 3000
+        }
     });
+}
 
 if (mix.inProduction()) {
+    mix.disableNotifications();
     mix.version()
 }

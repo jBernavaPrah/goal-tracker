@@ -1,0 +1,19 @@
+fragment PaginatorInfoFields on PaginatorInfo {
+    total
+    currentPage
+    hasMorePages
+    perPage
+}
+
+
+query Statistics {
+    statistics{
+        goalDifference
+        goalsAgainst
+        goalsFor
+        wins
+        losses
+        ratio
+        name
+    }
+}

@@ -1,25 +1,27 @@
-import {ApolloClient, createHttpLink, InMemoryCache} from "@apollo/client";
-import {setContext} from "@apollo/client/link/context";
+import {ApolloClient, InMemoryCache, from, HttpLink} from "@apollo/client";
+import {onError} from "@apollo/client/link/error";
 
-const link = createHttpLink({
-    uri: '/graphql',
-    credentials: 'same-origin'
+const errorLink = onError(({graphQLErrors, networkError}) => {
+    if (graphQLErrors)
+        graphQLErrors.forEach(({message, locations, path}) =>
+            console.log(
+                `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+            ),
+        );
+
+    if (networkError) console.log(`[Network error]: ${networkError}`);
 });
 
-const csrfToken = setContext((_, {headers}) => {
-    // get the authentication token from local storage if it exists
-    const token = document?.querySelector('meta[name="csrf-token"]')?.getAttribute("content");
-
-    // return the headers to the context so httpLink can read them
-    return {
-        headers: {
-            ...headers,
-            'X-CSRF-TOKEN': token ?? "",
+const link = from([
+    errorLink,
+    new HttpLink({
+        uri: '/graphql', credentials: 'same-origin', headers: {
+            'X-CSRF-TOKEN': document?.querySelector('meta[name="csrf-token"]')?.getAttribute("content"),
         }
-    }
-});
+    })
+])
 
 export default new ApolloClient({
-    link: csrfToken.concat(link),
+    link: link,
     cache: new InMemoryCache()
 });

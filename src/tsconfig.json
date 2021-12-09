@@ -21,13 +21,12 @@
     "declaration": false,
     "jsx": "react-jsx",
     "incremental": true,
-    "baseUrl": ".",
+    "baseUrl": "./resources/js",
       "noEmit": false,
     "paths": {
-      "@paymenu/*": [
-        "./resources/js/*"
+      "@fe/*": [
+        "./*"
       ]
-
     }
   },
   "exclude": [

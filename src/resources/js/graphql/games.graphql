@@ -1,0 +1,46 @@
+query listGames {
+    games {
+        data {
+            ...GameFields
+        }
+        paginatorInfo {
+            ...PaginatorInfoFields
+        }
+
+    }
+}
+
+query gameDetails($id: ID!){
+    game(id: $id){
+        ...GameFields
+    }
+}
+
+mutation createGame($team1: ID! $team2: ID! $playedAt: DateTime!){
+    createGame(input: {team1: $team1 team2: $team2, playedAt: $playedAt}){
+        ...GameFields
+    }
+}
+
+mutation updateGame($id: ID! $team1:ID $team2:ID $playedAt: DateTime){
+    updateGame(input: {id: $id team1: $team1 team2: $team2 playedAt: $playedAt}){
+        ...GameFields
+    }
+}
+
+fragment GameFields on Game {
+    id
+    team1 {
+        id
+        name
+    }
+    team2 {
+        id
+        name
+    }
+    totalGoalsTeam1
+    totalGoalsTeam2
+    playedAt
+    createdAt
+
+}
