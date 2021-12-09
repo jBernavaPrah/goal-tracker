@@ -42,15 +42,19 @@ class GoalTest extends TestCase
     {
 
         $player = Player::factory()->create();
+        $game = Game::factory([
+            'team1_id' => $player->team->id
+        ])->create();
 
         $this->graphQL(/** @lang GraphQL */ '
-        mutation ($player:ID! ) {
-        createGoal(input: {player: $player}){
+        mutation ($player:ID! $game: ID! ) {
+        createGoal(input: {player: $player game: $game}){
             id, player {id}
         }
         }
         ', [
-            'player' => $player->id
+            'player' => $player->id,
+            'game' => $game->id
         ])->assertJson([
             'data' => [
                 'createGoal' => [

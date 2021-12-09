@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Game;
 use App\Models\Team;
+use Carbon\Carbon;
 use Tests\TestCase;
 
 class GameTest extends TestCase
@@ -79,14 +80,15 @@ class GameTest extends TestCase
         $team2 = Team::factory()->create();
 
         $this->graphQL(/** @lang GraphQL */ '
-        mutation ($team1:ID! $team2:ID!) {
-        createGame(input: {team1: $team1 team2: $team2 }){
+        mutation ($team1:ID! $team2:ID! $playedAt: DateTime!) {
+        createGame(input: {team1: $team1 team2: $team2 playedAt: $playedAt }){
             id, team1 { id } team2 { id }
         }
         }
         ', [
             'team1' => $team1->id,
-            'team2' => $team2->id
+            'team2' => $team2->id,
+            'playedAt' => Carbon::now()->toISOString()
         ])->assertJson([
             'data' => [
                 'createGame' => [
