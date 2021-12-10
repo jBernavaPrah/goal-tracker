@@ -1,7 +1,6 @@
 import React from "react";
 import {Navigate, Outlet, Route, Routes} from "react-router-dom";
 import ErrorBoundary from "@fe/components/ErrorBoundary";
-import HomePage from "@fe/pages/HomePage";
 import GamePage from "@fe/pages/GamePage";
 import GamesPage from "@fe/pages/GamesPage";
 import TeamsPage from "@fe/pages/TeamsPage";
@@ -37,7 +36,7 @@ function App() {
         <ErrorBoundary>
             <Routes>
                 <Route path={"/"} element={<Layout/>}>
-                    <Route index element={<HomePage/>}/>
+                    <Route index element={<StatisticsPage/>}/>
                     <Route path={"games"} element={<Outlet/>}>
                         <Route index element={<GamesPage/>}/>
                         <Route path={":id"} element={<GamePage/>}/>

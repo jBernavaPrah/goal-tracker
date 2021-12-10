@@ -25,9 +25,9 @@ mix.ts('resources/js/index.tsx', 'public/js')
 
 if (!mix.inProduction()) {
     mix.browserSync({
-        codeSync:true,
+        codeSync: true,
 
-        proxy: "localhost:8000",
+        proxy: "localhost:8080",
         files: "resources/js/**",
         ui: false,
         hmrOptions: {

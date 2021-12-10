@@ -2,16 +2,27 @@ version: "3.7"
 
 services:
 
-  app:
-    build: .
-    restart: unless-stopped
+  web:
+    image: nginx
+    volumes:
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+      - ./src:/var/www/html
     ports:
-      - "8000:8000"
+      - "8080:80"
+    depends_on:
+      - app
+    networks:
+      - goal-tracker
+
+  app:
+    build:
+      context: .
+      target: app
+    restart: unless-stopped
+
     environment:
-      - VIRTUAL_HOST=goal-tracker.test # Used for nginx-proxy
-      - VIRTUAL_PORT=8000 # Used for nginx-proxy
       - DB_CONNECTION=pgsql
-      - DB_HOST=goal-tracker-database-1
+      - DB_HOST=database
       - DB_DATABASE=goal_tracker
       - DB_USERNAME=goal_tracker
       - DB_PASSWORD=secret
@@ -22,11 +33,10 @@ services:
       - SESSION_DRIVER=redis
       - SESSION_LIFETIME=120
       - SESSION_DOMAIN=".goal-tracker.test"
-      - REDIS_HOST=goal-tracker-cache-1
+      - REDIS_HOST=cache
       - REDIS_CLIENT=predis
       - APP_NAME="goal-tracker Local"
       - APP_ENV=local
-      - APP_KEY=base64:oq2q+8lo8S3XFUeOhsnPezFclPRrfArB08EJOAzbUtA=
       - APP_DEBUG=true
       - APP_URL=https://goal-tracker.test
     volumes:
@@ -35,10 +45,10 @@ services:
       - database
       - cache
     networks:
-      - default
-      - external
+      - goal-tracker
 
   database:
+    container_name: "goal-tracker-database"
     image: postgres
     restart: unless-stopped
     volumes:
@@ -48,19 +58,18 @@ services:
       POSTGRES_DB: goal_tracker
       POSTGRES_USER: goal_tracker
     networks:
-      - default
-      - external
+      - goal-tracker
 
   cache:
+    container_name: "goal-tracker-cache"
     image: redis:5-alpine
     restart: unless-stopped
     networks:
-      - default
+      - goal-tracker
 
 volumes:
   database:
 
 networks:
-  external:
-    name: external
-  default:
+  goal-tracker:
+    driver: bridge

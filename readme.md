@@ -5,9 +5,11 @@
 You need at least `docker` your local machine.
 
 1. Clone this project.
-2. Run `docker run --rm -v $(pwd)/src:/app composer install`
-3. Run: `docker compose up -d`, will start all services need to run this project.
-4. After all services starts, go to the application on http://localhost:8000 
+2. Open the directory where you cloned the project.  
+3. Run `docker run --rm -v $(pwd)/src:/app composer install` to install all php dependencies.
+4. Run: `docker compose up -d`, will start all services need to run this project.
+5. The first time, it's required to migrate the database, so run `docker run --rm -v $(pwd)/src:/app php artisan migrate`.
+6. After all services starts, go to the application on http://localhost:8000 
 
 
 ### Tips:

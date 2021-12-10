@@ -12,7 +12,7 @@ RUN ln -nsf /usr/bin/php8 /usr/bin/php
 RUN rm -rf /var/cache/apk/*
 
 
-FROM build as App
+FROM build as app
 
 RUN apk --update --no-cache add \
     php8-pdo php8-pgsql php8-pdo_pgsql nano wget postgresql-dev
@@ -41,5 +41,10 @@ RUN    docker-php-ext-install pdo && \
 RUN rm -rf /var/cache/apk/*
 
 WORKDIR /var/www/html/
-EXPOSE 8000
-CMD ["php", "artisan", "serve",  "--host=0.0.0.0"]
+EXPOSE 9000
+CMD ["php-fpm"]
+
+FROM node:latest as prod
+
+COPY src/package.json src/yarn.lock /var/www/html/
+RUN cd /var/www/html/ && yarn install --pure-lockfile && yarn run prod
