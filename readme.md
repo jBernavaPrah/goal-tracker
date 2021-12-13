@@ -12,6 +12,12 @@ You need at least `docker` and `git` your local machine.
 2. Run `sh build.sh` to install all php and react dependencies. This will take some time.
 3. After docker services start, open your browser and go to http://localhost:8080
 
+### Graphql service:
+
+To reach the GraphQL client and have documented API, simple go to http://localhost:8080/playground-graphql
+
+There you can also play around using a simple client for GraphQL.
+
 ### Would you improve it?
 
 Clone this project, improve it and send me a PR! I will review it, and if is good enough, will be merged. 
