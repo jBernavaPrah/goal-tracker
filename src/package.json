@@ -30,7 +30,9 @@
         "react-refresh": "^0.11.0",
         "resolve-url-loader": "^4.0.0",
         "ts-loader": "^9.2.6",
-        "typescript": "^4.4.3"
+        "typescript": "^4.4.3",
+        "@hapi/cryptiles": "^5.1.0",
+        "tar":"^6.1.11"
     },
     "dependencies": {
         "@apollo/client": "^3.4.16",
