@@ -1,13 +1,22 @@
 import React from "react"
 import {Grid} from "@mui/material";
-import StatisticsContainer from "@fe/containers/StatisticsContainer";
+import TableStatistics from "@fe/components/TableStatistics";
+import Typography from "@mui/material/Typography";
 
 export default function HomePage(): JSX.Element {
+
+
     return (
         <>
-            <Grid container spacing={2} justifyContent={"center"}>
+            <Grid container justifyContent={"center"}>
                 <Grid item>
-                    <StatisticsContainer/>
+                    <Typography variant={"h4"}>Welcome to Goal Tracker</Typography>
+                </Grid>
+            </Grid>
+
+            <Grid container justifyContent={"center"} sx={{mt:2}}>
+                <Grid item>
+                    <TableStatistics/>
                 </Grid>
             </Grid>
 

@@ -2,7 +2,7 @@ import Button, {ButtonProps} from "@mui/material/Button";
 import React, {useState} from "react";
 import {TextField} from "@mui/material";
 import ConfirmationDialog from "@fe/components/ConfirmActionDialog";
-import {useCreateTeamMutation} from "@fe/generated/graphql";
+import {StatisticsDocument, useCreateTeamMutation} from "@fe/generated/graphql";
 import {gql} from "@apollo/client";
 
 
@@ -12,7 +12,9 @@ export default function CreateNewTeamButton(props: ButtonProps = {}): JSX.Elemen
     const [name, setName] = useState<string>("")
 
     const [createTeam, {loading}] = useCreateTeamMutation({
+        refetchQueries:[StatisticsDocument],
         update: (cache, result) => {
+
             cache.modify({
                 fields: {
                     teams(existing, {}) {

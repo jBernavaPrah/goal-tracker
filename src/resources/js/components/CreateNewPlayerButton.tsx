@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import Button, {ButtonProps} from "@mui/material/Button";
-import {Team, useCreatePlayerMutation} from "@fe/generated/graphql";
+import {ListGamesDocument, ListTeamsDocument, Team, useCreatePlayerMutation} from "@fe/generated/graphql";
 import ConfirmationDialog from "@fe/components/ConfirmActionDialog";
 import {TextField} from "@mui/material";
 import {gql} from "@apollo/client";
@@ -16,9 +16,9 @@ export default function CreateNewPlayerButton({team, ...props}: CreateNewPlayerB
     const [open, setOpen] = useState<boolean>(false)
 
     const [createPlayer] = useCreatePlayerMutation({
+        refetchQueries:[ListGamesDocument, ListTeamsDocument],
         update: (cache, result) => {
             if (!result.data?.createPlayer) return;
-            console.log(result.data?.createPlayer);
 
             cache.modify({
                 fields: {

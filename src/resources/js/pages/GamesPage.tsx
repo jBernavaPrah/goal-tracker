@@ -1,13 +1,12 @@
-import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {GameFieldsFragment, useListGamesQuery} from "@fe/generated/graphql";
 import Typography from "@mui/material/Typography";
 import {Card, CardActions, CardContent, CardHeader, Grid} from "@mui/material";
 import Button from "@mui/material/Button";
-import NewGameDialog from "@fe/components/NewGameDialog";
 import dayjs from "dayjs";
 import Skeletons from "@fe/components/Skeletons";
 import TitlePage from "@fe/components/TitlePage";
+import CreateNewGameButton from "@fe/components/CreateNewGameButton";
 
 interface GameCardProps {
     game: GameFieldsFragment
@@ -41,6 +40,12 @@ function ListGames(): JSX.Element {
 
     if (loading) return <Skeletons/>
 
+    if (!data?.games?.data.length) return (
+        <Grid container justifyContent={"center"}>
+            <Typography variant={"overline"} align={"center"}>No Games found.</Typography>
+        </Grid>
+    )
+
     return (
         <Grid container justifyContent={"space-around"} spacing={3}>
             {data?.games?.data?.map((value, index) =>
@@ -57,9 +62,6 @@ function ListGames(): JSX.Element {
 export default function GamesPage(): JSX.Element {
 
 
-    const [openNewGameDialog, setOpenNewGameDialog] = useState<boolean>(false)
-
-
     return (
         <>
             <Grid container>
@@ -67,14 +69,13 @@ export default function GamesPage(): JSX.Element {
                     <TitlePage title={"Games"}/>
                 </Grid>
                 <Grid container justifyContent={"right"} sx={{mb: 2}}>
-                    <Button onClick={() => setOpenNewGameDialog(true)} size={"small"}>Create Game</Button>
+                    <CreateNewGameButton/>
                 </Grid>
                 <Grid item xs={12}>
                     <ListGames/>
                 </Grid>
 
             </Grid>
-            <NewGameDialog open={openNewGameDialog} onClose={() => setOpenNewGameDialog(false)}/>
         </>
 
     )

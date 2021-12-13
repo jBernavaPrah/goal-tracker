@@ -8,6 +8,7 @@ import {Container, createTheme, Paper, ThemeProvider} from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline"
 import Header from "@fe/components/Header";
 import StatisticsPage from "@fe/pages/StatisticsPage";
+import HomePage from "@fe/pages/HomePage";
 
 
 const theme = createTheme()
@@ -36,7 +37,7 @@ function App() {
         <ErrorBoundary>
             <Routes>
                 <Route path={"/"} element={<Layout/>}>
-                    <Route index element={<StatisticsPage/>}/>
+                    <Route index element={<HomePage/>}/>
                     <Route path={"games"} element={<Outlet/>}>
                         <Route index element={<GamesPage/>}/>
                         <Route path={":id"} element={<GamePage/>}/>
