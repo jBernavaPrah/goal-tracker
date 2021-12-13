@@ -17,7 +17,7 @@ services:
   app:
     build:
       context: .
-      target: app
+      target: development
     restart: unless-stopped
 
     environment:
@@ -26,6 +26,7 @@ services:
       - DB_DATABASE=goal_tracker
       - DB_USERNAME=goal_tracker
       - DB_PASSWORD=secret
+      - DB_PORT=5432
       - BROADCAST_DRIVER=redis
       - CACHE_DRIVER=redis
       - FILESYSTEM_DRIVER=local
@@ -35,7 +36,7 @@ services:
       - SESSION_DOMAIN=".goal-tracker.test"
       - REDIS_HOST=cache
       - REDIS_CLIENT=predis
-      - APP_NAME="goal-tracker Local"
+      - APP_NAME="goal-tracker"
       - APP_ENV=local
       - APP_DEBUG=true
       - APP_URL=https://goal-tracker.test

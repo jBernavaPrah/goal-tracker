@@ -1,4 +1,4 @@
-FROM php:8-fpm-alpine as build
+FROM php:8-fpm-alpine as development
 
 # Dependencies
 RUN apk --update --no-cache add \
@@ -10,9 +10,6 @@ RUN apk --update --no-cache add \
 
 RUN ln -nsf /usr/bin/php8 /usr/bin/php
 RUN rm -rf /var/cache/apk/*
-
-
-FROM build as app
 
 RUN apk --update --no-cache add \
     php8-pdo php8-pgsql php8-pdo_pgsql nano wget postgresql-dev
@@ -43,8 +40,3 @@ RUN rm -rf /var/cache/apk/*
 WORKDIR /var/www/html/
 EXPOSE 9000
 CMD ["php-fpm"]
-
-FROM node:latest as prod
-
-COPY src/package.json src/yarn.lock /var/www/html/
-RUN cd /var/www/html/ && yarn install --pure-lockfile && yarn run prod
